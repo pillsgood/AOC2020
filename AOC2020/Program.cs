@@ -16,7 +16,7 @@ namespace AOC2020
                 .LoadCallingAssembly()
                 .AddConsole());
 
-            // adding console with force aggregate results of answers, otherwise iterate through the return value of runner.Run()
+            // adding console will force aggregate results of answers, otherwise iterate through the return value of runner.Run()
             aoc.Run();
         }
 
