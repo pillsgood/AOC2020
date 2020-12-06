@@ -24,19 +24,20 @@ namespace AOC2020
         [Part(1)]
         private string Part1(IPuzzleInput<IEnumerable<char[][]>> input)
         {
-            var groupDistinctQuestions = input.Value
-                .Select(group => group.SelectMany(chars => chars.Select(c => c)).Distinct().ToArray());
-            var answer = groupDistinctQuestions.Aggregate(0, (i, chars) => i + chars.Length);
+            var answer = input.Value
+                .Select(group => group.SelectMany(chars => chars.Select(c => c)).Distinct().ToArray())
+                .Aggregate(0, (i, chars) => i + chars.Length);
             return answer.ToString();
         }
 
         [Part(2)]
         private string Part2(IPuzzleInput<IEnumerable<char[][]>> input)
         {
-            var groupAllQuestions = input.Value
-                .Select(group => group.SelectMany(person => person.Select(c => c)).Distinct()
-                    .Count(c => group.All(person => person.Contains(c))));
-            var answer = groupAllQuestions.Aggregate((i, i1) => i + i1);
+            var answer = input.Value
+                .Select(group => group.SelectMany(person => person.Select(c => c))
+                    .Distinct()
+                    .Count(c => group.All(person => person.Contains(c))))
+                .Aggregate((i, i1) => i + i1);
             return answer.ToString();
         }
     }
