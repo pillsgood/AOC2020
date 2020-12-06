@@ -18,6 +18,12 @@ namespace AOC2020
 
             // adding console will force aggregate results of answers, otherwise iterate through the return value of runner.Run()
             aoc.Run();
+
+            // foreach (var (puzzle, results) in aoc.Run())
+            // foreach (var result in results)
+            // {
+            //     Console.WriteLine(result);
+            // }
         }
 
         private static void ConfigureServices(IServiceCollection services)
