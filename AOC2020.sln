@@ -2,6 +2,20 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AOC2020", "AOC2020\AOC2020.csproj", "{42367107-D264-4B59-89CB-7C2B7097795D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pillsgood.AdventOfCode", "Pillsgood.AdventOfCode", "{95BBBDA8-B874-4947-89DE-2AA8E229A3F9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pillsgood.AdventOfCode", "Pillsgood.AdventOfCode\Pillsgood.AdventOfCode\Pillsgood.AdventOfCode.csproj", "{62A0A971-ADD9-41CB-97B8-3C82A5CF7F59}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pillsgood.AdventOfCode.Abstractions", "Pillsgood.AdventOfCode\Pillsgood.AdventOfCode.Abstractions\Pillsgood.AdventOfCode.Abstractions.csproj", "{A8B3214C-8F26-40DE-BB4A-12E230923E73}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pillsgood.AdventOfCode.CLI", "Pillsgood.AdventOfCode\Pillsgood.AdventOfCode.CLI\Pillsgood.AdventOfCode.CLI.csproj", "{D9CC3DDD-B41D-491D-810F-72E17D91949C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pillsgood.AdventOfCode.Console", "Pillsgood.AdventOfCode\Pillsgood.AdventOfCode.Console\Pillsgood.AdventOfCode.Console.csproj", "{47A3AC60-38C9-4E4A-B1F8-0BDF22C4441B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pillsgood.AdventOfCode.Core", "Pillsgood.AdventOfCode\Pillsgood.AdventOfCode.Core\Pillsgood.AdventOfCode.Core.csproj", "{E4817E81-965C-4DC2-9214-65EED0C31CD5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pillsgood.Extensions.Logging", "Pillsgood.AdventOfCode\Pillsgood.Extensions.Logging\Pillsgood.Extensions.Logging.csproj", "{B540FD49-0DA2-43DE-91CF-0D76CFBD98E4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +26,37 @@ Global
 		{42367107-D264-4B59-89CB-7C2B7097795D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42367107-D264-4B59-89CB-7C2B7097795D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42367107-D264-4B59-89CB-7C2B7097795D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62A0A971-ADD9-41CB-97B8-3C82A5CF7F59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62A0A971-ADD9-41CB-97B8-3C82A5CF7F59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62A0A971-ADD9-41CB-97B8-3C82A5CF7F59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62A0A971-ADD9-41CB-97B8-3C82A5CF7F59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8B3214C-8F26-40DE-BB4A-12E230923E73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8B3214C-8F26-40DE-BB4A-12E230923E73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8B3214C-8F26-40DE-BB4A-12E230923E73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8B3214C-8F26-40DE-BB4A-12E230923E73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9CC3DDD-B41D-491D-810F-72E17D91949C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9CC3DDD-B41D-491D-810F-72E17D91949C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9CC3DDD-B41D-491D-810F-72E17D91949C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9CC3DDD-B41D-491D-810F-72E17D91949C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47A3AC60-38C9-4E4A-B1F8-0BDF22C4441B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47A3AC60-38C9-4E4A-B1F8-0BDF22C4441B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47A3AC60-38C9-4E4A-B1F8-0BDF22C4441B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47A3AC60-38C9-4E4A-B1F8-0BDF22C4441B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4817E81-965C-4DC2-9214-65EED0C31CD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4817E81-965C-4DC2-9214-65EED0C31CD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4817E81-965C-4DC2-9214-65EED0C31CD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4817E81-965C-4DC2-9214-65EED0C31CD5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B540FD49-0DA2-43DE-91CF-0D76CFBD98E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B540FD49-0DA2-43DE-91CF-0D76CFBD98E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B540FD49-0DA2-43DE-91CF-0D76CFBD98E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B540FD49-0DA2-43DE-91CF-0D76CFBD98E4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{62A0A971-ADD9-41CB-97B8-3C82A5CF7F59} = {95BBBDA8-B874-4947-89DE-2AA8E229A3F9}
+		{A8B3214C-8F26-40DE-BB4A-12E230923E73} = {95BBBDA8-B874-4947-89DE-2AA8E229A3F9}
+		{D9CC3DDD-B41D-491D-810F-72E17D91949C} = {95BBBDA8-B874-4947-89DE-2AA8E229A3F9}
+		{47A3AC60-38C9-4E4A-B1F8-0BDF22C4441B} = {95BBBDA8-B874-4947-89DE-2AA8E229A3F9}
+		{E4817E81-965C-4DC2-9214-65EED0C31CD5} = {95BBBDA8-B874-4947-89DE-2AA8E229A3F9}
+		{B540FD49-0DA2-43DE-91CF-0D76CFBD98E4} = {95BBBDA8-B874-4947-89DE-2AA8E229A3F9}
 	EndGlobalSection
 EndGlobal
