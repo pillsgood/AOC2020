@@ -17,69 +17,24 @@ namespace AOC2020
         private static IEnumerable<Seat> Process(string value)
         {
             return value.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim())
-                .Select(line => new Seat(line.ToArray()));
+                .Select(line => new Seat(line));
         }
 
         private class Seat
         {
-            private readonly Position _x = new Position(0, 7);
-            private readonly Position _y = new Position(0, 127);
-            private readonly Lazy<int> _seatId;
+            private readonly int _seatId;
 
-            public Seat(IEnumerable<char> partition)
+            public Seat(string partition)
             {
-                foreach (var c in partition)
-                {
-                    switch (c)
-                    {
-                        case 'F':
-                            _y.LowerHalf();
-                            break;
-                        case 'B':
-                            _y.UpperHalf();
-                            break;
-                        case 'L':
-                            _x.LowerHalf();
-                            break;
-                        case 'R':
-                            _x.UpperHalf();
-                            break;
-                        default:
-                            throw new Exception("Failed to parse partition");
-                    }
-                }
+                var x = Convert.ToInt32(partition[^3..].Replace('L', '0').Replace('R', '1'), 2);
+                var y = Convert.ToInt32(partition[..7].Replace('F', '0').Replace('B', '1'), 2);
 
-                _seatId = new Lazy<int>(() => (int) _y * 8 + (int) _x);
+                _seatId = y * 8 + x;
             }
 
-            public int SeatId => _seatId.Value;
+            public int SeatId => _seatId;
         }
 
-        private class Position
-        {
-            private int _lower;
-            private int _upper;
-
-            public static explicit operator int(Position position) => position._lower == position._upper
-                ? position._lower
-                : throw new ArgumentException("Position is not correct");
-
-            public Position(int start, int end)
-            {
-                _lower = start;
-                _upper = end;
-            }
-
-            public void UpperHalf()
-            {
-                _lower += (_upper - _lower + 1) / 2;
-            }
-
-            public void LowerHalf()
-            {
-                _upper -= (_upper - _lower + 1) / 2;
-            }
-        }
 
         [Part(1)]
         private string Part1(IEnumerable<Seat> seats)
