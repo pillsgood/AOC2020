@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 using Pillsgood.AdventOfCode;
+using Pillsgood.AdventOfCode.Client;
 using Pillsgood.AdventOfCode.Console;
 
 namespace AOC2020
@@ -14,7 +15,8 @@ namespace AOC2020
             var aoc = AdventOfCode.Build(config => config
                 .ConfigureServices(ConfigureServices)
                 .LoadCallingAssembly()
-                .AddConsole());
+                .AddConsole()
+                .AddClient());
 
             // adding console will force aggregate results of answers, otherwise iterate through the return value of runner.Run()
             aoc.Run();

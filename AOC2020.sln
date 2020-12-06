@@ -16,6 +16,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pillsgood.AdventOfCode.Core
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pillsgood.Extensions.Logging", "Pillsgood.AdventOfCode\Pillsgood.Extensions.Logging\Pillsgood.Extensions.Logging.csproj", "{B540FD49-0DA2-43DE-91CF-0D76CFBD98E4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pillsgood.AdventOfCode.Client", "Pillsgood.AdventOfCode\Pillsgood.AdventOfCode.Client\Pillsgood.AdventOfCode.Client.csproj", "{C017781C-A152-4076-9348-63FB752DFACD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +52,10 @@ Global
 		{B540FD49-0DA2-43DE-91CF-0D76CFBD98E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B540FD49-0DA2-43DE-91CF-0D76CFBD98E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B540FD49-0DA2-43DE-91CF-0D76CFBD98E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C017781C-A152-4076-9348-63FB752DFACD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C017781C-A152-4076-9348-63FB752DFACD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C017781C-A152-4076-9348-63FB752DFACD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C017781C-A152-4076-9348-63FB752DFACD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{62A0A971-ADD9-41CB-97B8-3C82A5CF7F59} = {95BBBDA8-B874-4947-89DE-2AA8E229A3F9}
@@ -58,5 +64,6 @@ Global
 		{47A3AC60-38C9-4E4A-B1F8-0BDF22C4441B} = {95BBBDA8-B874-4947-89DE-2AA8E229A3F9}
 		{E4817E81-965C-4DC2-9214-65EED0C31CD5} = {95BBBDA8-B874-4947-89DE-2AA8E229A3F9}
 		{B540FD49-0DA2-43DE-91CF-0D76CFBD98E4} = {95BBBDA8-B874-4947-89DE-2AA8E229A3F9}
+		{C017781C-A152-4076-9348-63FB752DFACD} = {95BBBDA8-B874-4947-89DE-2AA8E229A3F9}
 	EndGlobalSection
 EndGlobal

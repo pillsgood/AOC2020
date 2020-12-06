@@ -7,6 +7,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Pillsgood.AdventOfCode\Pillsgood.AdventOfCode.Abstractions\Pillsgood.AdventOfCode.Abstractions.csproj" />
+      <ProjectReference Include="..\Pillsgood.AdventOfCode\Pillsgood.AdventOfCode.Client\Pillsgood.AdventOfCode.Client.csproj" />
       <ProjectReference Include="..\Pillsgood.AdventOfCode\Pillsgood.AdventOfCode.Console\Pillsgood.AdventOfCode.Console.csproj" />
       <ProjectReference Include="..\Pillsgood.AdventOfCode\Pillsgood.AdventOfCode.Core\Pillsgood.AdventOfCode.Core.csproj" />
       <ProjectReference Include="..\Pillsgood.AdventOfCode\Pillsgood.AdventOfCode\Pillsgood.AdventOfCode.csproj" />
