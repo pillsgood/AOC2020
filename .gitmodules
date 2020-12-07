@@ -1,0 +1,4 @@
+[submodule "Pillsgood.AdventOfCode"]
+	path = Pillsgood.AdventOfCode
+	url = https://www.github.com/pillsgood/pillsgood.adventofcode
+	branch = master
