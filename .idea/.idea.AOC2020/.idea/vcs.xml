@@ -3,5 +3,6 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Pillsgood.AdventOfCode" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Pillsgood.AdventOfCode/Pillsgood.Extensions.Logging" vcs="Git" />
   </component>
 </project>
