@@ -2,7 +2,7 @@ using System;
 
 namespace AOC2020.DataTypes
 {
-    public struct Vector2Int : IComparable<Vector2Int>, IEquatable<Vector2Int>
+    public struct Vector2Int : IEquatable<Vector2Int>
     {
         public static Vector2Int zero = new Vector2Int(0, 0);
 
@@ -73,34 +73,7 @@ namespace AOC2020.DataTypes
         {
             return new Vector2Int((a.x % b + b) % b, (a.y % b + b) % b);
         }
-
-
-        public int CompareTo(Vector2Int other)
-        {
-            var xComparison = _x.CompareTo(other._x);
-            return xComparison != 0 ? xComparison : _y.CompareTo(other._y);
-        }
-
-        public static bool operator <(Vector2Int left, Vector2Int right)
-        {
-            return left.CompareTo(right) < 0;
-        }
-
-        public static bool operator >(Vector2Int left, Vector2Int right)
-        {
-            return left.CompareTo(right) > 0;
-        }
-
-        public static bool operator <=(Vector2Int left, Vector2Int right)
-        {
-            return left.CompareTo(right) <= 0;
-        }
-
-        public static bool operator >=(Vector2Int left, Vector2Int right)
-        {
-            return left.CompareTo(right) >= 0;
-        }
-
+        
         public bool Equals(Vector2Int other)
         {
             return _x == other._x && _y == other._y;
