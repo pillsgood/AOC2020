@@ -29,8 +29,6 @@ namespace AOC2020
 
         private static void ConfigureServices(IServiceCollection services)
         {
-            // services.AddLogging(builder =>
-            //     builder.AddAnsiConsole(options => options.TimeoutDuration = 50).SetMinimumLevel(LogLevel.Trace));
         }
     }
 }
