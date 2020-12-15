@@ -19,7 +19,7 @@ namespace AOC2020
                 .AddClient());
 
             // adding console will force aggregate results of puzzles, otherwise iterate through the return value of runner.Run()
-            aoc.Run();
+            aoc.Run(day: 15);
 
             // foreach (var puzzleData in aoc.Run())
             // foreach (var result in puzzleData.Results)
@@ -29,6 +29,8 @@ namespace AOC2020
 
         private static void ConfigureServices(IServiceCollection services)
         {
+            // services.AddLogging(builder =>
+            //     builder.AddAnsiConsole(options => options.TimeoutDuration = 50).SetMinimumLevel(LogLevel.Trace));
         }
     }
 }
