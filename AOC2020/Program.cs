@@ -1,5 +1,4 @@
 ﻿using System;
-using Autofac.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Pillsgood.AdventOfCode;
 using Pillsgood.AdventOfCode.Client;
@@ -22,8 +21,8 @@ namespace AOC2020
             // adding console will force aggregate results of puzzles, otherwise iterate through the return value of runner.Run()
             aoc.Run();
 
-            // foreach (var (puzzle, results) in aoc.Run())
-            // foreach (var result in results)
+            // foreach (var puzzleData in aoc.Run())
+            // foreach (var result in puzzleData.Results)
             // {
             // }
         }
