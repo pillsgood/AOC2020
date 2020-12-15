@@ -22,10 +22,12 @@ namespace AOC2020
             Unoccupied
         }
 
-        private class SeatMap : IEquatable<SeatMap>
+        private sealed record SeatMap
         {
             private readonly SeatState[][] _map;
+
             private readonly int _width;
+
             private readonly int _height;
 
             public SeatMap(IPuzzleInput input)
@@ -44,11 +46,9 @@ namespace AOC2020
                     throw new Exception("width is not the same across all rows");
             }
 
-            internal SeatMap(SeatMap map)
+            public SeatMap From
             {
-                _width = map._width;
-                _height = map._height;
-                _map = map._map.Select(states => states.ToArray()).ToArray();
+                init => _map = value._map.Select(states => states.ToArray()).ToArray();
             }
 
             public SeatState? GetSeatState(Vector2Int position) =>
@@ -88,18 +88,16 @@ namespace AOC2020
                 return state.HasValue ? position : (Vector2Int?) null;
             }
 
+            public bool Equals(SeatMap other) => !ReferenceEquals(null, other) && (ReferenceEquals(this, other) ||
+                _map.Select((states, i) => states.SequenceEqual(other._map[i])).All(b => b));
 
-            public bool Equals(SeatMap other) =>
-                !ReferenceEquals(null, other)
-                && (ReferenceEquals(this, other) ||
-                    _map.Select((states, i) =>
-                        other._map[i].SequenceEqual(states)).All(b => b));
+            public override int GetHashCode() => _map != null ? _map.GetHashCode() : 0;
         }
 
         private static bool Simulate(SeatMap map,
             Func<Vector2Int, IEnumerable<Vector2Int>> consideredSeatsImplementation, int occupyTolerance)
         {
-            var currentState = new SeatMap(map);
+            var currentState = map with {From = map};
             foreach (var seatIndex in currentState.GetAllSeatIndices())
             {
                 var state = currentState.GetSeatState(seatIndex);
@@ -118,14 +116,13 @@ namespace AOC2020
                 });
             }
 
-            return map.Equals(currentState);
+            return map.Equals(currentState) || Simulate(map, consideredSeatsImplementation, occupyTolerance);
         }
 
         [Part(1)]
         private string Part1(SeatMap map)
         {
-            while (!Simulate(map, map.GetNeighborSeatIndices, 4)) { }
-
+            Simulate(map, map.GetNeighborSeatIndices, 4);
             var answer = map.CountOccupied;
             return answer.ToString();
         }
@@ -133,8 +130,7 @@ namespace AOC2020
         [Part(2)]
         private string Part2(SeatMap map)
         {
-            while (!Simulate(map, map.GetClosestSeatIndices, 5)) { }
-
+            Simulate(map, map.GetClosestSeatIndices, 5);
             var answer = map.CountOccupied;
             return answer.ToString();
         }
