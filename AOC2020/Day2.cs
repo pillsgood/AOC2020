@@ -34,33 +34,9 @@ namespace AOC2020
             }
         }
 
-        private class Password
-        {
-            public Policy Policy { get; }
-            public string Value { get; }
+        private record Password(Policy Policy, string Value);
 
-            public Password(Policy policy, string value)
-            {
-                Policy = policy;
-                Value = value;
-            }
-
-            public override string ToString() => $"{Policy.RangeStart}-{Policy.RangeEnd} {Policy.Character}: {Value}";
-        }
-
-        private class Policy
-        {
-            public int RangeStart { get; }
-            public int RangeEnd { get; }
-            public char Character { get; }
-
-            public Policy(int rangeStart, int rangeEnd, char character)
-            {
-                RangeStart = rangeStart;
-                RangeEnd = rangeEnd;
-                Character = character;
-            }
-        }
+        private record Policy(int RangeStart, int RangeEnd, char Character);
 
         [Part(1)]
         private string Part1(IEnumerable<Password> passwords)
@@ -80,7 +56,7 @@ namespace AOC2020
             var validCounts = passwords.Count(password =>
             {
                 var characters = new[]
-                    { password.Value[password.Policy.RangeStart - 1], password.Value[password.Policy.RangeEnd - 1] };
+                    {password.Value[password.Policy.RangeStart - 1], password.Value[password.Policy.RangeEnd - 1]};
                 return characters.Count(c => c.Equals(password.Policy.Character)) == 1;
             });
 
