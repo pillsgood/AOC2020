@@ -14,23 +14,23 @@ namespace AOC2020
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton(provider =>
-                new PuzzleInput<Dictionary<char[], Dictionary<long, long>>>(provider, Process).Value);
+                new PuzzleInput<IEnumerable<Program>>(provider, Process).Value);
         }
 
-        private static Dictionary<char[], Dictionary<long, long>> Process(string value)
+        private record Program(char[] Mask, IEnumerable<Instruction> Instructions);
+
+        private record Instruction(long Address, long Value);
+
+        private static IEnumerable<Program> Process(string value)
         {
             var maskPattern = new Regex(@"mask.*?(?<Mask>[\d,X]+)");
             var valuePattern = new Regex(@"mem\[(?<Address>\d+)\].*?(?<Value>\d+)");
-            var masks = new Dictionary<char[], Dictionary<long, long>>();
             var input = maskPattern.Split(value.Trim()).Where(s => !string.IsNullOrEmpty(s)).ToArray();
             for (var i = 0; i < input.Length; i++)
             {
-                masks.Add(input[i].ToCharArray(), valuePattern.Matches(input[++i])
-                    .ToDictionary(match => long.Parse(match.Groups["Address"].Value),
-                        match => long.Parse(match.Groups["Value"].Value)));
+                yield return new Program(input[i].ToCharArray(), valuePattern.Matches(input[++i])
+                    .Select(match => new Instruction(long.Parse(match.Groups["Address"].Value), long.Parse(match.Groups["Value"].Value))));
             }
-
-            return masks;
         }
 
         private static char[] ToBits(long value, int length)
@@ -52,11 +52,11 @@ namespace AOC2020
         }
 
         [Part(1)]
-        private string Part1(Dictionary<char[], Dictionary<long, long>> input)
+        private string Part1(IEnumerable<Program> input)
         {
             var memory = new Dictionary<long, long>();
-            foreach (var (mask, values) in input)
-            foreach (var (address, value) in values)
+            foreach (var (mask, instructions) in input)
+            foreach (var (address, value) in instructions)
             {
                 memory[address] = ToLong(ToBits(value, 36).Select((c, i) => mask[i] == 'X' ? c : mask[i]).ToArray());
             }
@@ -66,11 +66,11 @@ namespace AOC2020
         }
 
         [Part(2)]
-        private string Part2(Dictionary<char[], Dictionary<long, long>> input)
+        private string Part2(IEnumerable<Program> input)
         {
             var memory = new Dictionary<long, long>();
-            foreach (var (mask, values) in input)
-            foreach (var (addressValue, value) in values)
+            foreach (var (mask, instructions) in input)
+            foreach (var (addressValue, value) in instructions)
             {
                 var floatingAddress = ToBits(addressValue, 36).Select((c, i) => mask[i] != '0' ? mask[i] : c).ToArray();
                 var floatingCount = floatingAddress.Count(c => c == 'X');

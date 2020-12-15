@@ -40,7 +40,7 @@ namespace AOC2020
         {
             private readonly List<Instruction> _instructions;
             public InstructionHandle instructionHandle;
-            public bool Ran { get; private set; } = false;
+            public bool Repeat { get; private set; } = false;
 
             private readonly int _value;
 
@@ -62,14 +62,14 @@ namespace AOC2020
             {
                 _instructions = instructions;
                 _value = instruction._value;
-                Ran = instruction.Ran;
+                Repeat = instruction.Repeat;
                 instructionHandle = instruction.instructionHandle;
                 instructions.Add(this);
             }
 
             public Instruction Run(ref int index, ref int accumulator)
             {
-                Ran = true;
+                Repeat = true;
                 instructionHandle?.Invoke(ref index, ref accumulator, _value);
                 if (instructionHandle != Jmp)
                 {
@@ -80,7 +80,7 @@ namespace AOC2020
             }
         }
 
-        private struct State
+        private class State
         {
             public int accumulator;
             private int _index;
@@ -109,7 +109,7 @@ namespace AOC2020
             public IEnumerable<State> FindBranchingPoint()
             {
                 var instruction = _instructions[_index];
-                while (!instruction.Ran)
+                while (!instruction.Repeat)
                 {
                     if (instruction.instructionHandle == Nop || instruction.instructionHandle == Jmp)
                     {
@@ -127,7 +127,7 @@ namespace AOC2020
             {
                 var instruction = _instructions[_index];
 
-                while (!instruction.Ran)
+                while (!instruction.Repeat)
                 {
                     instruction = instruction.Run(ref _index, ref accumulator);
                     if (_index >= _instructions.Count)
@@ -146,7 +146,7 @@ namespace AOC2020
             var accumulator = 0;
             var index = 0;
             var instruction = instructions[index];
-            while (!instruction.Ran)
+            while (!instruction.Repeat)
             {
                 instruction = instruction.Run(ref index, ref accumulator);
             }
@@ -159,16 +159,9 @@ namespace AOC2020
         private string Part2(List<Instruction> instructions)
         {
             var state = new State(instructions);
-            foreach (var branchState in state.FindBranchingPoint().Reverse())
-            {
-                if (branchState.RunUntilTerminate())
-                {
-                    var answer = branchState.accumulator;
-                    return answer.ToString();
-                }
-            }
-
-            return null;
+            var answer = state.FindBranchingPoint().FirstOrDefault(branch =>
+                branch.RunUntilTerminate())?.accumulator;
+            return answer.ToString();
         }
     }
 }

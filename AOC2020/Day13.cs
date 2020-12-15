@@ -10,35 +10,34 @@ namespace AOC2020
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IPuzzleInput<KeyValuePair<int, int[]>>>(provider =>
-                new PuzzleInput<KeyValuePair<int, int[]>>(provider, Process));
+            services.AddSingleton(provider => new PuzzleInput<Input>(provider, Process).Value);
         }
 
-        private static KeyValuePair<int, int[]> Process(string value)
+        private record Input(int Arrival, int[] BusIds);
+
+        private static Input Process(string value)
         {
             var input = value.Split('\n');
             var arrival = int.Parse(input[0]);
             var buses = input[1].Split(',').Select(s => s != "x" ? s : "-1").Select(int.Parse);
-            return new KeyValuePair<int, int[]>(arrival, buses.ToArray());
+            return new Input(arrival, buses.ToArray());
         }
 
-
         [Part(1)]
-        private string Part1(IPuzzleInput<KeyValuePair<int, int[]>> input)
+        private string Part1(Input input)
         {
-            var buses = input.Value.Value.Where(i => i != -1).OrderBy(i => i - input.Value.Key % i).ToArray();
-            var time = buses[0] - input.Value.Key % buses[0];
+            var buses = input.BusIds.Where(i => i != -1).OrderBy(i => i - input.Arrival % i).ToArray();
+            var time = buses[0] - input.Arrival % buses[0];
             var answer = buses[0] * time;
             return answer.ToString();
         }
 
 
         [Part(2)]
-        private string Part2(IPuzzleInput<KeyValuePair<int, int[]>> input)
+        private string Part2(Input input)
         {
-            var ids = input.Value.Value;
-            var mods = ids.Where(i => i != -1).ToArray();
-            var remainders = ids.Select((i, idx) => i == -1 ? -1 : (i - idx) % i).Where(i => i != -1).ToArray();
+            var mods = input.BusIds.Where(i => i != -1).ToArray();
+            var remainders = input.BusIds.Select((i, idx) => i == -1 ? -1 : (i - idx) % i).Where(i => i != -1).ToArray();
             var product = mods.Aggregate<int, long>(1, (i, j) => i * j);
             var answer = mods.Select((i, idx) => product / mods[idx])
                 .Select((p, idx) => remainders[idx] * ModInv(p, mods[idx]) * p).Sum() % product;

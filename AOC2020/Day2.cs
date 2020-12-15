@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Microsoft.Extensions.DependencyInjection;
 using Pillsgood.AdventOfCode.Abstractions;
 using Pillsgood.AdventOfCode.Core;
@@ -17,21 +18,14 @@ namespace AOC2020
 
         private static IEnumerable<Password> Process(string value)
         {
-            foreach (var (rangeStart, rangeEnd, password, character) in value
-                .Split('\n', StringSplitOptions.RemoveEmptyEntries)
-                .Select(s =>
-                {
-                    string[] arg0;
-                    string[] arg1;
-                    var password = (arg0 = s.Split(':'))[1].Trim();
-                    var range = (arg1 = arg0[0].Split(' '))[0].Trim().Split('-');
-                    var character = arg1[1].Trim();
-                    return (range[0].Trim(), range[1].Trim(), password, character);
-                }))
-            {
-                var policy = new Policy(int.Parse(rangeStart), int.Parse(rangeEnd), character[0]);
-                yield return new Password(policy, password);
-            }
+            var pattern = new Regex(@"(?<Start>\d+)-(?<End>\d+) (?<Char>\w): (?<Password>\w+)");
+            return pattern.Matches(value).Select(match =>
+                new Password(
+                    new Policy(
+                        int.Parse(match.Groups["Start"].Value),
+                        int.Parse(match.Groups["End"].Value),
+                        match.Groups["Char"].Value[0]),
+                    match.Groups["Password"].Value));
         }
 
         private record Password(Policy Policy, string Value);
@@ -56,7 +50,7 @@ namespace AOC2020
             var validCounts = passwords.Count(password =>
             {
                 var characters = new[]
-                    {password.Value[password.Policy.RangeStart - 1], password.Value[password.Policy.RangeEnd - 1]};
+                    { password.Value[password.Policy.RangeStart - 1], password.Value[password.Policy.RangeEnd - 1] };
                 return characters.Count(c => c.Equals(password.Policy.Character)) == 1;
             });
 

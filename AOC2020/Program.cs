@@ -19,7 +19,7 @@ namespace AOC2020
                 .AddClient());
 
             // adding console will force aggregate results of puzzles, otherwise iterate through the return value of runner.Run()
-            aoc.Run(day: 15);
+            aoc.Run();
 
             // foreach (var puzzleData in aoc.Run())
             // foreach (var result in puzzleData.Results)

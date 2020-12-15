@@ -28,7 +28,7 @@ namespace AOC2020
         }
 
         private readonly Dictionary<string, Func<string, bool>> _passportFields =
-            new Dictionary<string, Func<string, bool>>
+            new()
             {
                 {
                     "byr", s => ValidateInt(s, 1920, 2002)
