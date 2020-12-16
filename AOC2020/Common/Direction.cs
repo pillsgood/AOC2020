@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace AOC2020.DataTypes
+namespace AOC2020.Common
 {
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public enum Direction

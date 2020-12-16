@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AOC2020.DataTypes;
+using AOC2020.Common;
 using Microsoft.Extensions.DependencyInjection;
 using Pillsgood.AdventOfCode.Abstractions;
 using Pillsgood.AdventOfCode.Core;

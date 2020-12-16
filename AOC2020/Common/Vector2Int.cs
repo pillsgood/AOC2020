@@ -1,6 +1,6 @@
 using System;
 
-namespace AOC2020.DataTypes
+namespace AOC2020.Common
 {
     public struct Vector2Int : IEquatable<Vector2Int>
     {

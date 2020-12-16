@@ -1,7 +1,7 @@
 using System;
 using System.Numerics;
 
-namespace AOC2020.DataTypes
+namespace AOC2020.Common
 {
     public static class Vector2IntExtensions
     {
