@@ -27,8 +27,8 @@ namespace AOC2020
         private class TreeMap
         {
             private readonly List<List<char>> _map;
-            private int XMax { get; set; }
-            private int YMax { get; set; }
+            private int XMax { get; }
+            private int YMax { get; }
 
             public TreeMap(IPuzzleInput<List<List<char>>> input)
             {
