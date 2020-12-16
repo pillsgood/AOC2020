@@ -1,7 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using AOC2020.Common;
 using Microsoft.Extensions.DependencyInjection;
 using Pillsgood.AdventOfCode.Abstractions;
 using Pillsgood.AdventOfCode.Core;
@@ -22,15 +22,14 @@ namespace AOC2020
             return pattern.Matches(value).Select(match =>
                 new Password(
                     new Policy(
-                        int.Parse(match.Groups["Start"].Value),
-                        int.Parse(match.Groups["End"].Value),
+                        new RangeInt(int.Parse(match.Groups["Start"].Value), int.Parse(match.Groups["End"].Value)),
                         match.Groups["Char"].Value[0]),
                     match.Groups["Password"].Value));
         }
 
         private record Password(Policy Policy, string Value);
 
-        private record Policy(int RangeStart, int RangeEnd, char Character);
+        private record Policy(RangeInt Range, char Character);
 
         [Part(1)]
         private string Part1(IEnumerable<Password> passwords)
@@ -38,7 +37,7 @@ namespace AOC2020
             var validCounts = passwords.Count(password =>
             {
                 var charCount = password.Value.Count(c => c.Equals(password.Policy.Character));
-                return charCount >= password.Policy.RangeStart && charCount <= password.Policy.RangeEnd;
+                return password.Policy.Range.Contains(charCount);
             });
 
             return validCounts.ToString();
@@ -50,7 +49,7 @@ namespace AOC2020
             var validCounts = passwords.Count(password =>
             {
                 var characters = new[]
-                    { password.Value[password.Policy.RangeStart - 1], password.Value[password.Policy.RangeEnd - 1] };
+                    { password.Value[password.Policy.Range.Start - 1], password.Value[password.Policy.Range.End - 1] };
                 return characters.Count(c => c.Equals(password.Policy.Character)) == 1;
             });
 
