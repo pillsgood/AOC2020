@@ -13,21 +13,22 @@ namespace AOC2020
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton(provider =>
-                new PuzzleInput<IEnumerable<Field>>(provider, ParseFields).Value);
+            services.AddSingleton(provider => new PuzzleInput<IEnumerable<Field>>(provider, ParseFields).Value);
             services.AddSingleton(provider => new PuzzleInput<int[]>(provider, ParsePlayerTicket).Value);
-            services.AddSingleton(provider =>
-                new PuzzleInput<IEnumerable<int[]>>(provider, ParseNearbyTickets).Value);
+            services.AddSingleton(provider => new PuzzleInput<IEnumerable<int[]>>(provider, ParseNearbyTickets).Value);
         }
 
         private static IEnumerable<Field> ParseFields(string input)
         {
             var namePattern = new Regex(@"^([\w,\s]+):");
             var rangePattern = new Regex(@"(?<Start>\d+)-(?<End>\d+)");
-            return input.Split("your ticket").First().Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(s =>
-                new Field(namePattern.Match(s).Value,
-                    rangePattern.Matches(s).Select(match =>
-                        new RangeInt(int.Parse(match.Groups["Start"].Value), int.Parse(match.Groups["End"].Value)))));
+            return input.Split("your ticket")
+                .First()
+                .Split('\n', StringSplitOptions.RemoveEmptyEntries)
+                .Select(s => new Field(namePattern.Match(s).Value,
+                    rangePattern.Matches(s)
+                        .Select(match => new RangeInt(int.Parse(match.Groups["Start"].Value),
+                            int.Parse(match.Groups["End"].Value)))));
         }
 
         private static int[] ParsePlayerTicket(string input)
@@ -39,7 +40,9 @@ namespace AOC2020
         private static IEnumerable<int[]> ParseNearbyTickets(string input)
         {
             var pattern = new Regex(@"nearby tickets:\n?([\d,\,,\n?]+)");
-            return pattern.Match(input).Groups[1].Value.Split('\n', StringSplitOptions.RemoveEmptyEntries)
+            return pattern.Match(input)
+                .Groups[1]
+                .Value.Split('\n', StringSplitOptions.RemoveEmptyEntries)
                 .Select(s => s.Split(',').Select(int.Parse).ToArray());
         }
 
@@ -48,8 +51,8 @@ namespace AOC2020
         [Part(1)]
         private string Part1(IEnumerable<Field> fields, IEnumerable<int[]> nearbyTickets)
         {
-            var invalids = nearbyTickets.SelectMany(ints => ints.Select(i => i)).Where(i =>
-                fields.SelectMany(field => field.Ranges.Select(rangeInt => rangeInt))
+            var invalids = nearbyTickets.SelectMany(ints => ints.Select(i => i))
+                .Where(i => fields.SelectMany(field => field.Ranges.Select(rangeInt => rangeInt))
                     .All(rangeInt => !rangeInt.Contains(i)));
             var answer = invalids.Sum();
             return answer.ToString();
@@ -58,14 +61,17 @@ namespace AOC2020
         [Part(2)]
         private string Part2(IEnumerable<Field> fields, IEnumerable<int[]> nearbyTickets, int[] playerTicket)
         {
-            var validTickets = nearbyTickets.Where(ticket =>
+            var validTickets = nearbyTickets
+                .Where(ticket =>
                     ticket.All(i => fields.SelectMany(field => field.Ranges.Select(r => r)).Any(r => r.Contains(i))))
-                .Append(playerTicket).ToArray();
+                .Append(playerTicket)
+                .ToArray();
             var possibleFieldIndices = fields.ToDictionary(field => field,
                 field => Enumerable.Range(0, playerTicket.Length)
-                    .Where(idx => validTickets.Select(ints => ints[idx])
-                        .All(i => field.Ranges.Any(rangeInt => rangeInt.Contains(i)))).ToList());
-
+                    .Where(idx =>
+                        validTickets.Select(ints => ints[idx])
+                            .All(i => field.Ranges.Any(rangeInt => rangeInt.Contains(i))))
+                    .ToList());
             var definiteFieldIndices = new Dictionary<Field, int>();
             while (possibleFieldIndices.Values.Any(ints => ints.Count != 1))
             {
@@ -77,7 +83,8 @@ namespace AOC2020
 
             var answer = definiteFieldIndices
                 .Where(pair => pair.Key.Name.StartsWith("departure", StringComparison.OrdinalIgnoreCase))
-                .Select(pair => playerTicket[pair.Value]).Aggregate(1L, (i, j) => i * j);
+                .Select(pair => playerTicket[pair.Value])
+                .Aggregate(1L, (i, j) => i * j);
             return answer.ToString();
         }
     }
