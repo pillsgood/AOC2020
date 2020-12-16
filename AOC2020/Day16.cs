@@ -14,32 +14,32 @@ namespace AOC2020
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton(provider =>
-                new PuzzleInput<IEnumerable<Field>>(provider, ProcessFields).Value);
-            services.AddSingleton(provider => new PuzzleInput<int[]>(provider, ProcessPlayerTicket).Value);
+                new PuzzleInput<IEnumerable<Field>>(provider, ParseFields).Value);
+            services.AddSingleton(provider => new PuzzleInput<int[]>(provider, ParsePlayerTicket).Value);
             services.AddSingleton(provider =>
-                new PuzzleInput<IEnumerable<int[]>>(provider, ProcessNearbyTickets).Value);
+                new PuzzleInput<IEnumerable<int[]>>(provider, ParseNearbyTickets).Value);
         }
 
-        private static IEnumerable<Field> ProcessFields(string value)
+        private static IEnumerable<Field> ParseFields(string input)
         {
             var namePattern = new Regex(@"^([\w,\s]+):");
             var rangePattern = new Regex(@"(?<Start>\d+)-(?<End>\d+)");
-            return value.Split("your ticket").First().Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(s =>
+            return input.Split("your ticket").First().Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(s =>
                 new Field(namePattern.Match(s).Value,
                     rangePattern.Matches(s).Select(match =>
                         new RangeInt(int.Parse(match.Groups["Start"].Value), int.Parse(match.Groups["End"].Value)))));
         }
 
-        private static int[] ProcessPlayerTicket(string value)
+        private static int[] ParsePlayerTicket(string input)
         {
             var pattern = new Regex(@"your ticket:\n?([\d,\,]+)");
-            return pattern.Match(value).Groups[1].Value.Split(',').Select(int.Parse).ToArray();
+            return pattern.Match(input).Groups[1].Value.Split(',').Select(int.Parse).ToArray();
         }
 
-        private static IEnumerable<int[]> ProcessNearbyTickets(string value)
+        private static IEnumerable<int[]> ParseNearbyTickets(string input)
         {
             var pattern = new Regex(@"nearby tickets:\n?([\d,\,,\n?]+)");
-            return pattern.Match(value).Groups[1].Value.Split('\n', StringSplitOptions.RemoveEmptyEntries)
+            return pattern.Match(input).Groups[1].Value.Split('\n', StringSplitOptions.RemoveEmptyEntries)
                 .Select(s => s.Split(',').Select(int.Parse).ToArray());
         }
 

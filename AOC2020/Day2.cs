@@ -13,13 +13,13 @@ namespace AOC2020
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient(provider =>
-                new PuzzleInput<IEnumerable<Password>>(provider, Process).Value);
+                new PuzzleInput<IEnumerable<Password>>(provider, Parse).Value);
         }
 
-        private static IEnumerable<Password> Process(string value)
+        private static IEnumerable<Password> Parse(string input)
         {
             var pattern = new Regex(@"(?<Start>\d+)-(?<End>\d+) (?<Char>\w): (?<Password>\w+)");
-            return pattern.Matches(value).Select(match =>
+            return pattern.Matches(input).Select(match =>
                 new Password(
                     new Policy(
                         new RangeInt(int.Parse(match.Groups["Start"].Value), int.Parse(match.Groups["End"].Value)),

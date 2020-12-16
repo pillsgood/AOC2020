@@ -11,12 +11,12 @@ namespace AOC2020
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton(provider => new PuzzleInput<IEnumerable<Seat>>(provider, Process).Value);
+            services.AddSingleton(provider => new PuzzleInput<IEnumerable<Seat>>(provider, Parse).Value);
         }
 
-        private static IEnumerable<Seat> Process(string value)
+        private static IEnumerable<Seat> Parse(string input)
         {
-            return value.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim())
+            return input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim())
                 .Select(line => new Seat(line));
         }
 

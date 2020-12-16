@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Pillsgood.AdventOfCode.Abstractions;
 using Pillsgood.AdventOfCode.Core;
 
-
 namespace AOC2020
 {
     public partial class Day1 : IPuzzle
@@ -13,10 +12,10 @@ namespace AOC2020
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IPuzzleInput<IEnumerable<int>>>(provider =>
-                new PuzzleInput<IEnumerable<int>>(provider, Process));
+                new PuzzleInput<IEnumerable<int>>(provider, Parse));
         }
 
-        private static IEnumerable<int> Process(string value) => value
+        private static IEnumerable<int> Parse(string input) => input
             .Split('\n', StringSplitOptions.RemoveEmptyEntries)
             .Select(s => s.Trim()).Select(int.Parse);
 

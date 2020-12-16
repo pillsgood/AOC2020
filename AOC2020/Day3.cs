@@ -11,7 +11,17 @@ namespace AOC2020
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<TreeMap>();
+            services.AddSingleton<IPuzzleInput<List<List<char>>>>(provider =>
+                new PuzzleInput<List<List<char>>>(provider, Parse));
+            services.AddScoped<TreeMap>();
+        }
+
+        private static List<List<char>> Parse(string input)
+        {
+            return input.Split('\n', StringSplitOptions.RemoveEmptyEntries)
+                .Select(s => s.Trim())
+                .Select(line => line.ToList())
+                .ToList();
         }
 
         private class TreeMap
@@ -20,9 +30,16 @@ namespace AOC2020
             private int XMax { get; set; }
             private int YMax { get; set; }
 
-            public TreeMap(IPuzzleInput puzzleInput)
+            public TreeMap(IPuzzleInput<List<List<char>>> input)
             {
-                _map = ReadPuzzleInput(puzzleInput.Value);
+                _map = input.Value;
+                YMax = _map.Count;
+                XMax = _map[0].Count;
+
+                if (_map.Any(row => row.Count != XMax))
+                {
+                    throw new Exception("NOT ALL ROW HAVE THE SAME SIZE");
+                }
             }
 
             private char GetAtPosition(int x, int y)
@@ -34,24 +51,6 @@ namespace AOC2020
                     throw new ArgumentException("Y Index out of range");
 
                 return _map[y][x];
-            }
-
-            private List<List<char>> ReadPuzzleInput(string input)
-            {
-                var map = input.Split('\n', StringSplitOptions.RemoveEmptyEntries)
-                    .Select(s => s.Trim())
-                    .Select(line => line.ToList())
-                    .ToList();
-
-                YMax = map.Count;
-                XMax = map[0].Count;
-
-                if (map.Any(row => row.Count != XMax))
-                {
-                    throw new Exception("NOT ALL ROW HAVE THE SAME SIZE");
-                }
-
-                return map;
             }
 
             public long TraverseMapAndCount(int right, int down)

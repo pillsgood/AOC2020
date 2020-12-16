@@ -12,11 +12,11 @@ namespace AOC2020
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IPuzzleInput<long[]>>(provider =>
-                new PuzzleInput<long[]>(provider, Process));
+                new PuzzleInput<long[]>(provider, Parse));
         }
 
-        private static long[] Process(string value) =>
-            value.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(s => long.Parse(s.Trim())).ToArray();
+        private static long[] Parse(string input) =>
+            input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(s => long.Parse(s.Trim())).ToArray();
 
         private static IEnumerable<Tuple<long, long>> Pair(IEnumerable<long> source) => Pair(source, arg => arg);
 

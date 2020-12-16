@@ -11,13 +11,13 @@ namespace AOC2020
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped(provider => new PuzzleInput<List<Instruction>>(provider, Process).Value);
+            services.AddScoped(provider => new PuzzleInput<List<Instruction>>(provider, Parse).Value);
         }
 
-        private static List<Instruction> Process(string value)
+        private static List<Instruction> Parse(string input)
         {
             var instructions = new List<Instruction>();
-            foreach (var line in value.Split('\n', StringSplitOptions.RemoveEmptyEntries))
+            foreach (var line in input.Split('\n', StringSplitOptions.RemoveEmptyEntries))
             {
                 _ = new Instruction(instructions, line);
             }

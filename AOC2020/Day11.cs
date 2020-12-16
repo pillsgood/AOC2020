@@ -12,7 +12,21 @@ namespace AOC2020
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IPuzzleInput<SeatState[][]>>(provider =>
+                new PuzzleInput<SeatState[][]>(provider, Parse));
             services.AddScoped<SeatMap>();
+        }
+
+        private static SeatState[][] Parse(string input)
+        {
+            return input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim())
+                .Select(s => s.Select(c => c switch
+                {
+                    'L' => SeatState.Unoccupied,
+                    '#' => SeatState.Occupied,
+                    '.' => SeatState.Floor,
+                    _ => throw new Exception("Failed to parse seat state")
+                }).ToArray()).ToArray();
         }
 
         private enum SeatState
@@ -30,16 +44,9 @@ namespace AOC2020
 
             private readonly int _height;
 
-            public SeatMap(IPuzzleInput input)
+            public SeatMap(IPuzzleInput<SeatState[][]> input)
             {
-                _map = input.Value.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim())
-                    .Select(s => s.Select(c => c switch
-                    {
-                        'L' => SeatState.Unoccupied,
-                        '#' => SeatState.Occupied,
-                        '.' => SeatState.Floor,
-                        _ => throw new Exception("Failed to parse seat state")
-                    }).ToArray()).ToArray();
+                _map = input.Value;
                 _height = _map.Length;
                 _width = _map[0].Length;
                 if (_map.Any(states => states.Length != _width))

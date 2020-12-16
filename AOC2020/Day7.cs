@@ -14,12 +14,12 @@ namespace AOC2020
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton(provider => new PuzzleInput<List<Bag>>(provider, Process).Value);
+            services.AddSingleton(provider => new PuzzleInput<List<Bag>>(provider, Parse).Value);
             services.AddSingleton(provider => provider.GetRequiredService<List<Bag>>()
                 .Find(bag => bag.color.Equals(Match, StringComparison.OrdinalIgnoreCase)));
         }
 
-        private static List<Bag> Process(string input)
+        private static List<Bag> Parse(string input)
         {
             var bags = new List<Bag>();
             foreach (var line in input.Split("\n", StringSplitOptions.RemoveEmptyEntries))

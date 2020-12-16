@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Pillsgood.AdventOfCode.Abstractions;
@@ -10,16 +9,16 @@ namespace AOC2020
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton(provider => new PuzzleInput<Input>(provider, Process).Value);
+            services.AddSingleton(provider => new PuzzleInput<Input>(provider, Parse).Value);
         }
 
         private record Input(int Arrival, int[] BusIds);
 
-        private static Input Process(string value)
+        private static Input Parse(string input)
         {
-            var input = value.Split('\n');
-            var arrival = int.Parse(input[0]);
-            var buses = input[1].Split(',').Select(s => s != "x" ? s : "-1").Select(int.Parse);
+            var lines = input.Split('\n');
+            var arrival = int.Parse(lines[0]);
+            var buses = lines[1].Split(',').Select(s => s != "x" ? s : "-1").Select(int.Parse);
             return new Input(arrival, buses.ToArray());
         }
 
@@ -37,7 +36,8 @@ namespace AOC2020
         private string Part2(Input input)
         {
             var mods = input.BusIds.Where(i => i != -1).ToArray();
-            var remainders = input.BusIds.Select((i, idx) => i == -1 ? -1 : (i - idx) % i).Where(i => i != -1).ToArray();
+            var remainders = input.BusIds.Select((i, idx) => i == -1 ? -1 : (i - idx) % i).Where(i => i != -1)
+                .ToArray();
             var product = mods.Aggregate<int, long>(1, (i, j) => i * j);
             var answer = mods.Select((i, idx) => product / mods[idx])
                 .Select((p, idx) => remainders[idx] * ModInv(p, mods[idx]) * p).Sum() % product;

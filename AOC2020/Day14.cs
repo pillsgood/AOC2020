@@ -14,21 +14,21 @@ namespace AOC2020
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton(provider =>
-                new PuzzleInput<IEnumerable<Program>>(provider, Process).Value);
+                new PuzzleInput<IEnumerable<Program>>(provider, Parse).Value);
         }
 
         private record Program(char[] Mask, IEnumerable<Instruction> Instructions);
 
         private record Instruction(long Address, long Value);
 
-        private static IEnumerable<Program> Process(string value)
+        private static IEnumerable<Program> Parse(string input)
         {
             var maskPattern = new Regex(@"mask.*?(?<Mask>[\d,X]+)");
             var valuePattern = new Regex(@"mem\[(?<Address>\d+)\].*?(?<Value>\d+)");
-            var input = maskPattern.Split(value.Trim()).Where(s => !string.IsNullOrEmpty(s)).ToArray();
-            for (var i = 0; i < input.Length; i++)
+            var programLines = maskPattern.Split(input.Trim()).Where(s => !string.IsNullOrEmpty(s)).ToArray();
+            for (var i = 0; i < programLines.Length; i++)
             {
-                yield return new Program(input[i].ToCharArray(), valuePattern.Matches(input[++i])
+                yield return new Program(programLines[i].ToCharArray(), valuePattern.Matches(programLines[++i])
                     .Select(match => new Instruction(long.Parse(match.Groups["Address"].Value), long.Parse(match.Groups["Value"].Value))));
             }
         }
