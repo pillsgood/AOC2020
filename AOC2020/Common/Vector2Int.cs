@@ -10,6 +10,12 @@ namespace AOC2020.Common
 
         private int _y;
 
+        public static explicit operator Vector2Int(int[] ints)
+        {
+            Array.Resize(ref ints, 2);
+            return new Vector2Int(ints[0], ints[1]);
+        }
+
         public Vector2Int(int x, int y)
         {
             _x = x;
@@ -73,7 +79,7 @@ namespace AOC2020.Common
         {
             return new Vector2Int((a.x % b + b) % b, (a.y % b + b) % b);
         }
-        
+
         public bool Equals(Vector2Int other)
         {
             return _x == other._x && _y == other._y;
