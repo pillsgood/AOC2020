@@ -45,7 +45,7 @@ namespace AOC2020
         private string Part2(IEnumerable<Seat> seats)
         {
             var seatIds = seats.Select(seat => seat.SeatId).OrderBy(i => i).ToArray();
-            var answer = seatIds.FirstOrDefault(i =>
+            var answer = Enumerable.Range(seatIds[0], seatIds[^1]).FirstOrDefault(i =>
                 !seatIds.Contains(i) && seatIds.Contains(i + 1) && seatIds.Contains(i - 1));
             return answer.ToString();
         }
