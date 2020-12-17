@@ -18,7 +18,7 @@ namespace AOC2020
 
         private static IEnumerable<KeyValuePair<char, int>> Parse(string input) =>
             input.Split('\n', StringSplitOptions.RemoveEmptyEntries)
-                .Select(s => new KeyValuePair<char, int>(s[0], int.Parse(new string(s[1..]))));
+                .Select(s => new KeyValuePair<char, int>(s[0], int.Parse(new string(s.AsSpan(1)))));
 
         [Part(1)]
         private string Part1(IEnumerable<KeyValuePair<char, int>> input)

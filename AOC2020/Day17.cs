@@ -96,15 +96,11 @@ namespace AOC2020
             foreach (var position in map)
             {
                 var state = currentState.GetActive(position);
-                var neighborsActivity = currentState.GetNeighbors(position).Select(currentState.GetActive);
+                var activeNeighbors = currentState.GetNeighbors(position).Where(currentState.GetActive).ToArray();
                 map.SetActive(position, state switch
                 {
-                    true when neighborsActivity.Count(b => b) switch
-                    {
-                        2 or 3 => false,
-                        _ => true
-                    } => false,
-                    false when neighborsActivity.Count(b => b) == 3 => true,
+                    true when activeNeighbors.Length is not (2 or 3) => false,
+                    false when activeNeighbors.Length is 3 => true,
                     _ => state
                 });
             }
