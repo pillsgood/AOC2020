@@ -4,7 +4,8 @@ namespace AOC2020.Common
 {
     public struct Vector2Int : IEquatable<Vector2Int>
     {
-        public static Vector2Int zero = new Vector2Int(0, 0);
+        public static Vector2Int zero = new(0, 0);
+        public static Vector2Int one = new(1, 1);
 
         private int _x;
 

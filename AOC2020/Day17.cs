@@ -14,8 +14,8 @@ namespace AOC2020
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IPuzzleInput<bool[][]>>(provider => new PuzzleInput<bool[][]>(provider, Parse));
-            services.AddScoped<Map3D>();
-            services.AddScoped<Map4D>();
+            services.AddScoped<ActivityMap3D>();
+            services.AddScoped<ActivityMap4D>();
         }
 
         private static bool[][] Parse(string input)
@@ -25,38 +25,30 @@ namespace AOC2020
                 .ToArray();
         }
 
-        private abstract record Map<T> : IEnumerable<T>
+        private abstract record ActivityMap<T> : Map<T, bool>
         {
-            private readonly Dictionary<T, bool> _activity = new();
-
-            protected Map(IPuzzleInput<bool[][]> input)
+            protected ActivityMap(IPuzzleInput<bool[][]> input)
             {
-                _activity = Enumerable.Range(0, input.Value.Length)
+                map = Enumerable.Range(0, input.Value.Length)
                     .SelectMany(j => Enumerable.Range(0, input.Value[j].Length)
                         .Select(i => new KeyValuePair<T, bool>(Construct(i, j), input.Value[j][i])))
                     .ToDictionary(pair => pair.Key, pair => pair.Value);
             }
 
-            public IDictionary<T, bool> Activity
-            {
-                get => _activity;
-                init => _activity = new Dictionary<T, bool>(value);
-            }
-
-            public IEnumerator<T> GetEnumerator() => _activity.Keys.GetEnumerator();
-
-            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
             protected abstract T Construct(int i, int j);
 
             public abstract IEnumerable<T> GetNeighbors(T position);
 
-            public bool GetActive(T v) => _activity.ContainsKey(v) && _activity[v];
-            public void SetActive(T v, bool active) => _activity[v] = active;
+            public override bool this[T key]
+            {
+                get => map.ContainsKey(key) && map[key];
+                set => base[key] = value;
+            }
         }
 
-        private sealed record Map3D : Map<Vector3Int>
+        private sealed record ActivityMap3D : ActivityMap<Vector3Int>
         {
-            public Map3D(IPuzzleInput<bool[][]> input) : base(input)
+            public ActivityMap3D(IPuzzleInput<bool[][]> input) : base(input)
             {
             }
 
@@ -69,9 +61,9 @@ namespace AOC2020
                     .Where(v => v != position);
         }
 
-        private sealed record Map4D : Map<Vector4Int>
+        private sealed record ActivityMap4D : ActivityMap<Vector4Int>
         {
-            public Map4D(IPuzzleInput<bool[][]> input) : base(input)
+            public ActivityMap4D(IPuzzleInput<bool[][]> input) : base(input)
             {
             }
 
@@ -85,48 +77,48 @@ namespace AOC2020
                     .Where(v => v != position);
         }
 
-        private void Simulate<T>(Map<T> map)
+        private static void Simulate<T>(ActivityMap<T> activityMap)
         {
-            var currentState = map with {Activity = map.Activity};
-            foreach (var neighbor in currentState.SelectMany(currentState.GetNeighbors).Distinct().Except(currentState))
+            var currentState = activityMap with {Entries = activityMap};
+            foreach (var position in currentState.Select(pair => pair.Key).SelectMany(currentState.GetNeighbors).Distinct()
+                .Except(currentState.Select(pair => pair.Key)))
             {
-                map.SetActive(neighbor, false);
+                activityMap[position] = false;
             }
 
-            foreach (var position in map)
+            foreach (var (position, state) in activityMap)
             {
-                var state = currentState.GetActive(position);
-                var activeNeighbors = currentState.GetNeighbors(position).Where(currentState.GetActive).ToArray();
-                map.SetActive(position, state switch
+                var activeNeighbors = currentState.GetNeighbors(position).Count(v => currentState[v]);
+                activityMap[position] = state switch
                 {
-                    true when activeNeighbors.Length is not (2 or 3) => false,
-                    false when activeNeighbors.Length is 3 => true,
+                    true when activeNeighbors is not (2 or 3) => false,
+                    false when activeNeighbors is 3 => true,
                     _ => state
-                });
+                };
             }
         }
 
         [Part(1)]
-        private string Part1(Map3D map)
+        private string Part1(ActivityMap3D activityMap)
         {
             for (int i = 0; i < 6; i++)
             {
-                Simulate(map);
+                Simulate(activityMap);
             }
 
-            var answer = map.Count(map.GetActive);
+            var answer = activityMap.Count(pair => pair.Value);
             return answer.ToString();
         }
 
         [Part(2)]
-        private string Part2(Map4D map)
+        private string Part2(ActivityMap4D activityMap)
         {
             for (int i = 0; i < 6; i++)
             {
-                Simulate(map);
+                Simulate(activityMap);
             }
 
-            var answer = map.Count(map.GetActive);
+            var answer = activityMap.Count(pair => pair.Value);
             return answer.ToString();
         }
     }

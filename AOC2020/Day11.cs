@@ -12,8 +12,8 @@ namespace AOC2020
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IPuzzleInput<SeatState[][]>>(provider =>
-                new PuzzleInput<SeatState[][]>(provider, Parse));
+            services.AddSingleton(provider =>
+                new PuzzleInput<SeatState[][]>(provider, Parse).Value);
             services.AddScoped<SeatMap>();
         }
 
@@ -29,6 +29,30 @@ namespace AOC2020
                 }).ToArray()).ToArray();
         }
 
+        private static bool Simulate(SeatMap map,
+            Func<Vector2Int, IEnumerable<Vector2Int>> consideredSeatsImplementation, int occupyTolerance)
+        {
+            var currentState = map with {Entries = map};
+            foreach (var (seatIndex, state) in currentState)
+            {
+                var neighbors = consideredSeatsImplementation.Invoke(seatIndex);
+                map.SetSeatState(seatIndex, state switch
+                {
+                    SeatState.Occupied
+                        when neighbors.Count(position =>
+                            currentState[position] == SeatState.Occupied) >= occupyTolerance
+                        => SeatState.Unoccupied,
+                    SeatState.Unoccupied
+                        when neighbors.All(position =>
+                            currentState[position] == SeatState.Unoccupied)
+                        => SeatState.Occupied,
+                    _ => state
+                });
+            }
+
+            return map.Equals(currentState) || Simulate(map, consideredSeatsImplementation, occupyTolerance);
+        }
+
         private enum SeatState
         {
             Floor,
@@ -36,94 +60,41 @@ namespace AOC2020
             Unoccupied
         }
 
-        private sealed record SeatMap
+        private sealed record SeatMap : Map<SeatState>
         {
-            private readonly SeatState[][] _map;
-
-            private readonly int _width;
-
-            private readonly int _height;
-
-            public SeatMap(IPuzzleInput<SeatState[][]> input)
+            public SeatMap(SeatState[][] input) : base(input)
             {
-                _map = input.Value;
-                _height = _map.Length;
-                _width = _map[0].Length;
-                if (_map.Any(states => states.Length != _width))
-                    throw new Exception("width is not the same across all rows");
             }
 
-            public SeatMap From
-            {
-                init => _map = value._map.Select(states => states.ToArray()).ToArray();
-            }
+            public int CountOccupied => map.Values.Count(state => state == SeatState.Occupied);
 
-            public SeatState? GetSeatState(Vector2Int position) =>
-                position.x >= 0 && position.x < _width && position.y >= 0 && position.y < _height
-                    ? _map[position.y][position.x]
-                    : (SeatState?) null;
 
-            public void SetSeatState(Vector2Int position, SeatState? state) => _map[position.y][position.x] =
-                state != SeatState.Floor && state.HasValue ? state.Value : _map[position.y][position.x];
-
-            public int CountOccupied => _map.Sum(states => states.Count(state => state == SeatState.Occupied));
+            public void SetSeatState(Vector2Int position, SeatState? state) => map[position] =
+                state != SeatState.Floor && state.HasValue ? state.Value : map[position];
 
             public IEnumerable<Vector2Int> GetNeighborSeatIndices(Vector2Int position) =>
                 Enumerable.Range(position.x - 1, 3)
                     .SelectMany(x => Enumerable.Range(position.y - 1, 3).Select(y => new Vector2Int(x, y)))
-                    .Where(v => position != v && v.x >= 0 && v.x < _width && v.y >= 0 && v.y < _height)
-                    .Where(v => GetSeatState(v) != SeatState.Floor);
+                    .Where(v => position != v && map.ContainsKey(v))
+                    .Where(v => map[v] != SeatState.Floor);
 
             public IEnumerable<Vector2Int> GetClosestSeatIndices(Vector2Int position) =>
                 Enum.GetValues(typeof(Direction)).Cast<Direction>()
                     .Select(direction => GetFirstSeatInDirection(position, direction))
                     .Where(v => v.HasValue).Cast<Vector2Int>();
 
-            public IEnumerable<Vector2Int> GetAllSeatIndices() =>
-                Enumerable.Range(0, _width).SelectMany(x => Enumerable.Range(0, _height)
-                    .Select(y => new Vector2Int(x, y))).Where(v => GetSeatState(v) != SeatState.Floor);
-
             private Vector2Int? GetFirstSeatInDirection(Vector2Int position, Direction direction)
             {
-                SeatState? state;
-                do
+                while (map.TryGetValue(position += direction.GetStep(), out var state))
                 {
-                    position += direction.GetStep();
-                    state = GetSeatState(position);
-                } while (state.HasValue && state.Value == SeatState.Floor);
+                    if (state != SeatState.Floor)
+                    {
+                        return position;
+                    }
+                }
 
-                return state.HasValue ? position : (Vector2Int?) null;
+                return null;
             }
-
-            public bool Equals(SeatMap other) => !ReferenceEquals(null, other) && (ReferenceEquals(this, other) ||
-                _map.Select((states, i) => states.SequenceEqual(other._map[i])).All(b => b));
-
-            public override int GetHashCode() => _map != null ? _map.GetHashCode() : 0;
-        }
-
-        private static bool Simulate(SeatMap map,
-            Func<Vector2Int, IEnumerable<Vector2Int>> consideredSeatsImplementation, int occupyTolerance)
-        {
-            var currentState = map with {From = map};
-            foreach (var seatIndex in currentState.GetAllSeatIndices())
-            {
-                var state = currentState.GetSeatState(seatIndex);
-                var neighbors = consideredSeatsImplementation.Invoke(seatIndex);
-                map.SetSeatState(seatIndex, state switch
-                {
-                    SeatState.Occupied
-                        when neighbors.Count(position =>
-                            currentState.GetSeatState(position) == SeatState.Occupied) >= occupyTolerance
-                        => SeatState.Unoccupied,
-                    SeatState.Unoccupied
-                        when neighbors.All(position =>
-                            currentState.GetSeatState(position) == SeatState.Unoccupied)
-                        => SeatState.Occupied,
-                    _ => state
-                });
-            }
-
-            return map.Equals(currentState) || Simulate(map, consideredSeatsImplementation, occupyTolerance);
         }
 
         [Part(1)]

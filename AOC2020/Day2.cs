@@ -49,7 +49,7 @@ namespace AOC2020
             var validCounts = passwords.Count(password =>
             {
                 var characters = new[]
-                    { password.Value[password.Policy.Range.Start - 1], password.Value[password.Policy.Range.End - 1] };
+                    { password.Value[password.Policy.Range.Min - 1], password.Value[password.Policy.Range.Max - 1] };
                 return characters.Count(c => c.Equals(password.Policy.Character)) == 1;
             });
 

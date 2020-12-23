@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 
 namespace AOC2020.Common
@@ -38,5 +39,9 @@ namespace AOC2020.Common
             var dir = ((int) direction - rotation % 360 / 45) % len;
             return (Direction) (dir < 0 ? dir + len : dir);
         }
+
+        public static IEnumerable<Direction> NESW() => Enumerable.Range(0, 4).Select(i => (Direction) (i * 2));
+
+        public static Direction Opposite(this Direction direction) => (Direction) ((int) (direction + 4) % 8);
     }
 }
