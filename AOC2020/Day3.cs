@@ -28,8 +28,6 @@ namespace AOC2020
         {
             public TreeMap(char[][] input) : base(input)
             {
-                // map = input.SelectMany((row, j) => row.Select<char, (Vector2Int pos, char value)>((c, i) => (new Vector2Int(i, input.Length - j), c)))
-                //     .ToDictionary(tuple => tuple.pos, tuple => tuple.value);
             }
 
             public long TraverseMapAndCount(Vector2Int slope)
